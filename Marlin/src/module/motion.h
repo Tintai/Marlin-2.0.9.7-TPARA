@@ -163,7 +163,6 @@ inline float home_bump_mm(const AxisEnum axis) {
     void get_manual_axis_limits(const AxisEnum axis, float &amin, float &amax) {
       amin = -10000; amax = 10000; // "No limits"
       #if HAS_SOFTWARE_ENDSTOPS
-       SERIAL_ECHOLNPGM("TEEEEEEEEEST");
         if (enabled()) switch (axis) {
           case X_AXIS:
             TERN_(MIN_SOFTWARE_ENDSTOP_X, amin = min.x);
