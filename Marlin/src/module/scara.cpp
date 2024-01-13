@@ -31,6 +31,7 @@
 #include "scara.h"
 #include "motion.h"
 #include "planner.h"
+#include "stepper.h"
 
 #if ENABLED(AXEL_TPARA)
   #include "endstops.h"
@@ -260,6 +261,13 @@ float segments_per_second = TERN(AXEL_TPARA, TPARA_SEGMENTS_PER_SECOND, SCARA_SE
   }
 
   void inverse_kinematics(const xyz_pos_t &raw) {
+
+    
+    /*if (!TPARA_position_is_reachable()) {
+    SERIAL_ECHOLNPGM("Error: Target position is not reachable!");
+    return;
+    }*/
+
     const xyz_pos_t spos = raw - robot_offset;
 
     const float RXY = SQRT(HYPOT2(spos.x, spos.y)),
@@ -274,7 +282,7 @@ float segments_per_second = TERN(AXEL_TPARA, TPARA_SEGMENTS_PER_SECOND, SCARA_SE
                 K2 = L2 * SG,
 
                 // Angle of Body Joint
-                THETA = ATAN2(spos.y, spos.x),
+                THETA = ATAN2(spos.y + TPARA_EE_OFFSET, spos.x),
 
                 // Angle of Elbow Joint
                 //GAMMA = ACOS(CG),
@@ -286,18 +294,23 @@ float segments_per_second = TERN(AXEL_TPARA, TPARA_SEGMENTS_PER_SECOND, SCARA_SE
 
                 // Elbow motor angle measured from horizontal, same frame as shoulder  (r+)
                 PSI = PHI + GAMMA;
+                       
 
     delta.set(DEGREES(THETA), DEGREES(PHI), DEGREES(PSI));
 
-    //SERIAL_ECHOLNPGM(" SCARA (x,y,z) ", spos.x , ",", spos.y, ",", spos.z, " Rho=", RHO, " Rho2=", RHO2, " Theta=", THETA, " Phi=", PHI, " Psi=", PSI, " Gamma=", GAMMA);
+    SERIAL_ECHOPGM_P(PSTR("X:"), spos.x, PSTR(" Y:"), spos.y, PSTR(" Z:"), spos.z);//, " E:","0.00");
+    report_current_position_e();
+    stepper.report_a_position(planner.position);
+    SERIAL_ECHOLNPGM("TPARA ROT: ", DEGREES(THETA), " LOW: ", DEGREES(PHI), " HIGH: ", DEGREES(PSI));
+
   }
 
 #endif
 
 void scara_report_positions() {
-  SERIAL_ECHOLNPGM("ROBOT_ARM_2L ROT: ", planner.get_axis_position_degrees(A_AXIS)
+  SERIAL_ECHOLNPGM("[TPARA] ROT: ", planner.get_axis_position_degrees(A_AXIS)
     #if ENABLED(AXEL_TPARA)
-      , "  LOW: ", planner.get_axis_position_degrees(B_AXIS)
+      , " LOW: ", planner.get_axis_position_degrees(B_AXIS)
       , " HIGH: ", planner.get_axis_position_degrees(C_AXIS)
     #else
       , "  low:  " TERN_(MORGAN_SCARA, "+Theta") ":", planner.get_axis_position_degrees(B_AXIS)

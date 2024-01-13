@@ -210,6 +210,15 @@ inline void report_logical_position(const xyze_pos_t &rpos) {
   );
 }//*/
 
+//*// Report the logical position for a given machine position
+inline void report_logical_position_e(const xyze_pos_t &rpos) {
+  const xyze_pos_t lpos = rpos.asLogical();
+  #if HAS_EXTRUDERS
+    SERIAL_ECHOPGM_P(PSTR(" E:"), lpos.e);
+  #endif
+}//*/
+
+
 // Report the real current position according to the steppers.
 // Forward kinematics and un-leveling are applied.
 void report_real_position() {
@@ -230,6 +239,10 @@ void report_real_position() {
 void report_current_position() {
   report_logical_position(current_position);
   report_more_positions();
+}
+
+void report_current_position_e() {
+  report_logical_position_e(current_position);
 }
 
 /**
@@ -311,7 +324,7 @@ void report_current_position_projected() {
       can_reach = HYPOT2(rx, ry) <= sq(DELTA_PRINTABLE_RADIUS - inset + fslop);
 
     #elif ENABLED(AXEL_TPARA)
-    
+
       const float R2 = HYPOT2(rx - TPARA_OFFSET_X, ry - TPARA_OFFSET_Y);
       can_reach = (
         R2 <= sq(L1 + L2) - inset
@@ -556,10 +569,10 @@ void do_blocking_move_to(NUM_AXIS_ARGS(const float), const_feedRate_t fr_mm_s/*=
     const feedRate_t k_feedrate = fr_mm_s ?: homing_feedrate(K_AXIS)
   );
 
-  #if IS_KINEMATIC
+  /*//#if IS_KINEMATIC
     if (!position_is_reachable(x, y)) return;
     destination = current_position;          // sync destination at the start
-  #endif
+  #endif//*/
 
   #if ENABLED(DELTA)
 

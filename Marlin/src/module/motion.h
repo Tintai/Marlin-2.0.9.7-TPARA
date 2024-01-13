@@ -161,8 +161,9 @@ inline float home_bump_mm(const AxisEnum axis) {
 
     xyz_pos_t min, max;
     void get_manual_axis_limits(const AxisEnum axis, float &amin, float &amax) {
-      amin = -100000; amax = 100000; // "No limits"
+      amin = -10000; amax = 10000; // "No limits"
       #if HAS_SOFTWARE_ENDSTOPS
+       SERIAL_ECHOLNPGM("TEEEEEEEEEST");
         if (enabled()) switch (axis) {
           case X_AXIS:
             TERN_(MIN_SOFTWARE_ENDSTOP_X, amin = min.x);
@@ -232,6 +233,7 @@ inline float home_bump_mm(const AxisEnum axis) {
 
 void report_real_position();
 void report_current_position();
+void report_current_position_e();
 void report_current_position_projected();
 
 #if ENABLED(AUTO_REPORT_POSITION)
@@ -507,13 +509,9 @@ void home_if_needed(const bool keeplev=false);
   bool position_is_reachable(const_float_t rx, const_float_t ry, const float inset=0);
 
   inline bool position_is_reachable(const xy_pos_t &pos, const float inset=0) {
-    
-    SERIAL_ECHOLNPGM("LOW: ", B_AXIS);
-    SERIAL_ECHOLNPGM("HIGH: ", C_AXIS);
-
     return position_is_reachable(pos.x, pos.y, inset);
   }
-
+    
 #else
 
   // Return true if the given position is within the machine bounds.

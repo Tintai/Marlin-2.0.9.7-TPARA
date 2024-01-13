@@ -2900,7 +2900,7 @@ int32_t Stepper::triggered_position(const AxisEnum axis) {
 void Stepper::report_a_position(const xyz_long_t &pos) {
   SERIAL_ECHOLNPGM_P(
     LIST_N(DOUBLE(NUM_AXES),
-      TERN(SAYS_A, PSTR(STR_COUNT_A), PSTR(STR_COUNT_X)), pos.x,
+      TERN(SAYS_A, PSTR(" A:"), PSTR(STR_COUNT_X)), pos.x,
       TERN(SAYS_B, PSTR(" B:"), SP_Y_LBL), pos.y,
       TERN(SAYS_C, PSTR(" C:"), SP_Z_LBL), pos.z,
       SP_I_LBL, pos.i,

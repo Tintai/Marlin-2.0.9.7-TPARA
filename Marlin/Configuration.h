@@ -45,7 +45,7 @@
 #define AXEL_TPARA
 #if ENABLED(AXEL_TPARA)
   #define DEBUG_ROBOT_KINEMATICS
-  #define TPARA_SEGMENTS_PER_SECOND 200
+  #define TPARA_SEGMENTS_PER_SECOND 400
   #define SCARA_SEGMENTS_PER_SECOND TPARA_SEGMENTS_PER_SECOND
 
   // Length of inner and outer support arms. Measure arm lengths precisely.
@@ -58,10 +58,12 @@
   #define TPARA_OFFSET_Y    0       // (mm)
   #define TPARA_OFFSET_Z    0       // (mm)
 
+  #define TPARA_EE_OFFSET   100
+
   #define SCARA_FEEDRATE_SCALING  // Convert XY feedrate from mm/s to degrees/s on the fly
 
   // Radius around the center where the arm cannot reach
-  #define MIDDLE_DEAD_ZONE_R   100  // (mm)
+  #define MIDDLE_DEAD_ZONE_R   80  // (mm)
 
   // Calculated from Calibration Guide and M360 / M114. See http://reprap.harleystudio.co.za/?page_id=1073
   //#define THETA_HOMING_OFFSET  0
@@ -74,10 +76,10 @@
 
 //                                      X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 38, 492 , 492 , 500 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 30.46, 492 , 492 , 500 }
 
 //                                     X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, 500, 300 }
+#define DEFAULT_MAX_FEEDRATE          { 1000, 1000, 1000, 1000 }
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -86,7 +88,7 @@
 
  // Override with M201
  //                                     X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
-#define DEFAULT_MAX_ACCELERATION      { 300, 300, 300, 10000 } //{ 3000, 3000, 3000, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 3000, 1000, 1000, 10000 } //{ 3000, 3000, 3000, 10000 }
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -101,9 +103,9 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          500    // X, Y, Z ... and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  500    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   500    // X, Y, Z ... acceleration for travel (non printing) moves
+#define DEFAULT_ACCELERATION          1000    // X, Y, Z ... and E acceleration for printing moves
+#define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
+#define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z ... acceleration for travel (non printing) moves
 
 /**
  * Default Jerk limits (mm/s)
@@ -988,15 +990,15 @@
  *
  * *** IT IS HIGHLY RECOMMENDED TO LEAVE THIS OPTION ENABLED! ***
  */
-#define PREVENT_COLD_EXTRUSION
-#define EXTRUDE_MINTEMP 170
+//#define PREVENT_COLD_EXTRUSION
+//#define EXTRUDE_MINTEMP 170
 
 /**
  * Prevent a single extrusion longer than EXTRUDE_MAXLENGTH.
  * Note: For Bowden Extruders make this large enough to allow load/unload.
  */
-#define PREVENT_LENGTHY_EXTRUDE
-#define EXTRUDE_MAXLENGTH 200
+//#define PREVENT_LENGTHY_EXTRUDE
+//#define EXTRUDE_MAXLENGTH 500
 
 //===========================================================================
 //======================== Thermal Runaway Protection =======================
