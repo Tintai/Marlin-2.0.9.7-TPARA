@@ -28,11 +28,11 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if HAS_HEATED_BED
-
 #include "../gcode.h"
 #include "../../module/temperature.h"
 #include "../../lcd/marlinui.h"
+
+#if HAS_HEATED_BED
 
 /**
  * M140 - Set Bed Temperature target and return immediately
@@ -97,3 +97,30 @@ void GcodeSuite::M140_M190(const bool isM190) {
 }
 
 #endif // HAS_HEATED_BED
+
+#if ENABLED(MOSFET_CONTROL_M170)
+  void GcodeSuite::M170() {
+    if (parser.seenval('P')) {
+      const uint8_t pinValue = parser.value_byte();
+
+      if (pinValue == 1) {
+        digitalWrite(MOSFET_C_PIN, HIGH);
+      } else if (pinValue == 0) {
+        digitalWrite(MOSFET_C_PIN, LOW);
+      }
+    }
+  }
+
+  void GcodeSuite::M171() {
+    if (parser.seenval('P')) {
+      const uint8_t pinValue = parser.value_byte();
+
+      if (pinValue == 1) {
+        digitalWrite(MOSFET_B_PIN, HIGH);
+      } else if (pinValue == 0) {
+        digitalWrite(MOSFET_B_PIN, LOW);
+      }
+    }
+  }
+
+#endif

@@ -193,27 +193,33 @@
 // Heaters / Fans
 //
 #ifndef MOSFET_A_PIN
-  #define MOSFET_A_PIN                        10
+  #define MOSFET_A_PIN                        10 // 10 HE0
 #endif
 #ifndef MOSFET_B_PIN
-  #define MOSFET_B_PIN                         9
+  #define MOSFET_B_PIN                         9 // 9 HE1
 #endif
 #ifndef MOSFET_C_PIN
-  #define MOSFET_C_PIN                         8
+  #define MOSFET_C_PIN                         8 // 8 HB
 #endif
 #ifndef MOSFET_D_PIN
   #define MOSFET_D_PIN                        -1
 #endif
 
-#define HEATER_0_PIN                MOSFET_A_PIN
+#ifndef CONTROL_MOSFET_A // HE0
+  #define HEATER_0_PIN                MOSFET_A_PIN
+#endif
 
 #if FET_ORDER_EFB                                 // Hotend, Fan, Bed
   #define HEATER_BED_PIN            MOSFET_C_PIN
 #elif FET_ORDER_EEF                               // Hotend, Hotend, Fan
   #define HEATER_1_PIN              MOSFET_B_PIN
-#elif FET_ORDER_EEB                               // Hotend, Hotend, Bed
-  #define HEATER_1_PIN              MOSFET_B_PIN
-  #define HEATER_BED_PIN            MOSFET_C_PIN
+#elif FET_ORDER_EEB
+  #ifndef CONTROL_MOSFET_B // HE1                 // Hotend, Hotend, Bed
+    #define HEATER_1_PIN              MOSFET_B_PIN
+  #endif
+  #ifndef CONTROL_MOSFET_C // HB
+    #define HEATER_BED_PIN            MOSFET_C_PIN
+  #endif
 #elif FET_ORDER_EFF                               // Hotend, Fan, Fan
   #define FAN1_PIN                  MOSFET_C_PIN
 #elif DISABLED(FET_ORDER_SF)                      // Not Spindle, Fan (i.e., "EFBF" or "EFBE")

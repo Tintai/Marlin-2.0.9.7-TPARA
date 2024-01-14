@@ -820,6 +820,11 @@ private:
     #endif
   #endif
 
+  #if ENABLED(MOSFET_CONTROL_M170)
+    static void M170();
+    static void M171();
+  #endif
+
   #if DISABLED(NO_VOLUMETRICS)
     static void M200();
     static void M200_report(const bool forReplay=true);

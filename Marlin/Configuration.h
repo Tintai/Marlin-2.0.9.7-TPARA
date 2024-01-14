@@ -37,9 +37,9 @@
  */
 #define CONFIGURATION_H_VERSION 02000905
 
-  //===========================================================================
-  //=========================== TPARA kinematics ==============================
-  //===========================================================================
+//===========================================================================
+//=========================== TPARA kinematics ==============================
+//===========================================================================
 
 // Enable for TPARA kinematics and configure below
 #define AXEL_TPARA
@@ -58,9 +58,23 @@
   #define TPARA_OFFSET_Y    0       // (mm)
   #define TPARA_OFFSET_Z    0       // (mm)
 
-  #define TPARA_EE_OFFSET   100
+  #define TPARA_EE_OFFSET   100     // Y offset (mm)
+
+  // Control HE0, HE1 and HB with commands:
+  // HE0 - M104 S100 (ON) & M104 S0 (OFF) (This will turn OFF aswell when STOP is pressed)
+  // HE1 - M171 P1 (ON) & M171 P0 (OFF) (Holds state, good for LED)
+  // HB  - M170 P1 (ON) & M170 P0 (OFF) (Holds state)
+
+  #define MOSFET_CONTROL_M170       // M170 to control
+  #ifdef MOSFET_CONTROL_M170
+    #undef  CONTROL_MOSFET_A        // HE0 as normal Heater 0
+    #define CONTROL_MOSFET_B        // HE1
+    #define CONTROL_MOSFET_C        // HB
+  #endif
 
   #define SCARA_FEEDRATE_SCALING  // Convert XY feedrate from mm/s to degrees/s on the fly
+
+  #define THERMAL_PROTECTION_ENABLE false
 
   // Radius around the center where the arm cannot reach
   #define MIDDLE_DEAD_ZONE_R   80  // (mm)
@@ -723,14 +737,14 @@
  *
  */
 #define TEMP_SENSOR_0 998
-#define TEMP_SENSOR_1 0
+#define TEMP_SENSOR_1 998
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
 #define TEMP_SENSOR_5 0
 #define TEMP_SENSOR_6 0
 #define TEMP_SENSOR_7 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_BED 998
 #define TEMP_SENSOR_PROBE 0
 #define TEMP_SENSOR_CHAMBER 0
 #define TEMP_SENSOR_COOLER 0
@@ -1016,11 +1030,12 @@
  * If you get "Thermal Runaway" or "Heating failed" errors the
  * details can be tuned in Configuration_adv.h
  */
-
-#define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
-#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
-#define THERMAL_PROTECTION_CHAMBER // Enable thermal protection for the heated chamber
-#define THERMAL_PROTECTION_COOLER  // Enable thermal protection for the laser cooling
+#if ENABLED(THERMAL_PROTECTION_ENABLE)
+  #define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
+  #define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
+  #define THERMAL_PROTECTION_CHAMBER // Enable thermal protection for the heated chamber
+  #define THERMAL_PROTECTION_COOLER  // Enable thermal protection for the laser cooling
+#endif
 
 //===========================================================================
 //============================= Mechanical Settings =========================

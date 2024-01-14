@@ -698,6 +698,11 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         #endif
       #endif
 
+      #if ENABLED(MOSFET_CONTROL_M170)
+        case 170: M170(); break;
+        case 171: M171(); break; 
+      #endif
+
       #if DISABLED(NO_VOLUMETRICS)
         case 200: M200(); break;                                  // M200: Set filament diameter, E to cubic units
       #endif
