@@ -72,7 +72,7 @@
     #define CONTROL_MOSFET_C        // HB
   #endif
 
-  #define SCARA_FEEDRATE_SCALING  // Convert XY feedrate from mm/s to degrees/s on the fly
+  //#define SCARA_FEEDRATE_SCALING  // Convert XY feedrate from mm/s to degrees/s on the fly
 
   #define THERMAL_PROTECTION_ENABLE false
 
@@ -88,21 +88,20 @@
 //============================== Movement Settings ============================
 //=============================================================================
 
-//                                      X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
-
+//                                      X      Y      Z    E1
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 30.46, 492 , 492 , 500 }
 
-//                                     X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
-#define DEFAULT_MAX_FEEDRATE          { 1000, 1000, 1000, 1000 }
+//                                      X      Y      Z    E1
+#define DEFAULT_MAX_FEEDRATE          { 5000, 3000, 3000, 1000 }
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
   #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10, 50 } // ...or, set your own edit limits
 #endif
 
- // Override with M201
- //                                     X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
-#define DEFAULT_MAX_ACCELERATION      { 3000, 1000, 1000, 10000 } //{ 3000, 3000, 3000, 10000 }
+// Override with M201
+//                                      X      Y      Z    E1
+#define DEFAULT_MAX_ACCELERATION      { 3000, 1000, 1000, 10000 }
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -129,11 +128,14 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
+
+#define DEFAULT_EJERK    5
+
 #define CLASSIC_JERK
 #if ENABLED(CLASSIC_JERK)
-  #define DEFAULT_XJERK  0.3
-  #define DEFAULT_YJERK  0.3
-  #define DEFAULT_ZJERK  0.3
+  #define DEFAULT_XJERK  5
+  #define DEFAULT_YJERK  5
+  #define DEFAULT_ZJERK  5
   //#define DEFAULT_IJERK  0.3
   //#define DEFAULT_JJERK  0.3
   //#define DEFAULT_KJERK  0.3
@@ -145,9 +147,6 @@
     #define MAX_JERK_EDIT_VALUES { 20, 20, 0.6, 10 } // ...or, set your own edit limits
   #endif
 #endif
-
-#define DEFAULT_EJERK    0.3
-
 
 #if ENABLED(AXEL_TPARA)
   #define MANUAL_X_HOME_POS 0

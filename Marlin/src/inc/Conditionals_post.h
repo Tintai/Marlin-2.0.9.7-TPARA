@@ -3194,13 +3194,15 @@
 /**
  * Only constrain Z on DELTA / SCARA machines
  */
+/*/
 #if IS_KINEMATIC
 
-  //#undef MIN_SOFTWARE_ENDSTOP_X
-  //#undef MIN_SOFTWARE_ENDSTOP_Y
-  //#undef MAX_SOFTWARE_ENDSTOP_X
-  //#undef MAX_SOFTWARE_ENDSTOP_Y
+  #undef MIN_SOFTWARE_ENDSTOP_X
+  #undef MIN_SOFTWARE_ENDSTOP_Y
+  #undef MAX_SOFTWARE_ENDSTOP_X
+  #undef MAX_SOFTWARE_ENDSTOP_Y
 #endif
+/*/
 
 /**
  * Bed Probing bounds
